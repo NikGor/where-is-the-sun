@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "where-is-the-sun"
+version = "0.1.0"
+description = ""
+authors = ["Nikolai Gordienko <nicolas.gordienko@gmail.com>"]
+readme = "README.md"
+packages = [{include = "where_is_the_sun"}]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+azimuth = "where_is_the_sun.scripts.azimuth:main"
