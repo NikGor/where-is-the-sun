@@ -7,8 +7,11 @@ readme = "README.md"
 packages = [{include = "where_is_the_sun"}]
 
 [tool.poetry.dependencies]
-python = "^3.8"
-
+python = "^3.9"
+flask = "^3.0.0"
+requests = "^2.31.0"
+python-dateutil = "^2.8.2"
+pydantic = "^2.11.7"
 
 [build-system]
 requires = ["poetry-core"]
@@ -16,3 +19,4 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
 azimuth = "where_is_the_sun.scripts.azimuth:main"
+web = "where_is_the_sun.web:main"

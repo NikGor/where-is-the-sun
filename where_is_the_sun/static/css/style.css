@@ -1,0 +1,331 @@
+/* Custom styles for Where is the Sun application */
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+}
+
+.container-fluid {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    margin: 20px;
+    overflow: hidden;
+}
+
+/* Airplane Visualization */
+.airplane-container {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 2rem 0;
+}
+
+.airplane {
+    position: relative;
+    width: 300px;
+    height: 80px;
+    transform: rotate(-5deg);
+    transition: all 0.5s ease;
+}
+
+.airplane-body {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.airplane-nose {
+    position: absolute;
+    left: -20px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 30px solid #2c3e50;
+    border-top: 15px solid transparent;
+    border-bottom: 15px solid transparent;
+}
+
+.airplane-fuselage {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 280px;
+    height: 30px;
+    background: linear-gradient(90deg, #34495e 0%, #2c3e50 100%);
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.airplane-tail {
+    position: absolute;
+    right: -15px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 25px solid #2c3e50;
+    border-top: 20px solid transparent;
+    border-bottom: 20px solid transparent;
+}
+
+.airplane-wing-left {
+    position: absolute;
+    left: 80px;
+    top: -25px;
+    width: 60px;
+    height: 8px;
+    background: #34495e;
+    border-radius: 4px;
+    transform: rotate(-15deg);
+}
+
+.airplane-wing-right {
+    position: absolute;
+    left: 80px;
+    bottom: -25px;
+    width: 60px;
+    height: 8px;
+    background: #34495e;
+    border-radius: 4px;
+    transform: rotate(15deg);
+}
+
+.airplane-windows {
+    position: absolute;
+    left: 40px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.window-row {
+    display: flex;
+    gap: 40px;
+}
+
+.window {
+    width: 12px;
+    height: 12px;
+    background: #87ceeb;
+    border-radius: 50%;
+    border: 2px solid #2c3e50;
+    transition: all 0.3s ease;
+}
+
+.window.sunny {
+    background: #ffd700;
+    box-shadow: 0 0 10px #ffd700;
+}
+
+.window.shady {
+    background: #4682b4;
+    box-shadow: 0 0 5px #4682b4;
+}
+
+/* Sun Indicator */
+.sun-indicator {
+    position: absolute;
+    top: 50px;
+    right: 100px;
+    z-index: 10;
+}
+
+.sun-icon {
+    font-size: 3rem;
+    color: #ffd700;
+    animation: sunPulse 2s infinite;
+}
+
+.sun-rays {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    width: 80px;
+    height: 80px;
+    border: 2px solid #ffd700;
+    border-radius: 50%;
+    animation: sunRotate 10s linear infinite;
+}
+
+.sun-rays::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 20px;
+    background: #ffd700;
+    border-radius: 2px;
+}
+
+.sun-rays::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 20px;
+    background: #ffd700;
+    border-radius: 2px;
+}
+
+/* Shadow Indicator */
+.shadow-indicator {
+    position: absolute;
+    top: 50px;
+    left: 100px;
+    z-index: 10;
+}
+
+.shadow-area {
+    width: 60px;
+    height: 60px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 50%;
+    animation: shadowPulse 2s infinite;
+}
+
+/* Animations */
+@keyframes sunPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+@keyframes sunRotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes shadowPulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.6; }
+}
+
+/* Welcome Message */
+.welcome-message {
+    text-align: center;
+    padding: 2rem;
+}
+
+.airplane-placeholder {
+    color: #6c757d;
+    margin-bottom: 1rem;
+}
+
+/* Form Styling */
+.form-label {
+    font-weight: 600;
+    color: #495057;
+}
+
+.form-select, .form-control {
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    transition: border-color 0.3s ease;
+}
+
+.form-select:focus, .form-control:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+}
+
+/* Results Styling */
+.alert-success {
+    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+}
+
+.card-title {
+    color: #495057;
+    font-weight: 600;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container-fluid {
+        margin: 10px;
+    }
+    
+    .airplane {
+        width: 250px;
+        height: 60px;
+    }
+    
+    .airplane-fuselage {
+        width: 230px;
+        height: 25px;
+    }
+    
+    .airplane-nose {
+        border-left-width: 25px;
+        border-top-width: 12px;
+        border-bottom-width: 12px;
+    }
+    
+    .airplane-tail {
+        border-left-width: 20px;
+        border-top-width: 15px;
+        border-bottom-width: 15px;
+    }
+    
+    .window {
+        width: 10px;
+        height: 10px;
+    }
+    
+    .window-row {
+        gap: 30px;
+    }
+}
+
+/* Loading Animation */
+.spinner-border {
+    width: 3rem;
+    height: 3rem;
+}
+
+/* Utility Classes */
+.text-primary {
+    color: #667eea !important;
+}
+
+.bg-light {
+    background-color: #f8f9fa !important;
+} 
