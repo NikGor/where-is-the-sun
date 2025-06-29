@@ -1,221 +1,170 @@
-/* Custom styles for Where is the Sun application */
+/*
+ * Where is the Sun? - Flight Sun Calculator
+ * Custom Stylesheet
+ *
+ * --- Table of Contents ---
+ * 0. CSS Variables
+ * 1. General & Typography
+ * 2. Layout
+ * 3. Form & Controls
+ * 4. Results & Visualization Panel
+ *    4.1. Welcome Message
+ *    4.2. Toggle Switches
+ *    4.3. Instrument & Plate Components
+ *    4.4. Airplane Visualization
+ *    4.5. Sun & Shadow Indicators
+ * 5. Animations
+ * 6. Loading Spinner
+ * 7. Media Queries
+ */
 
+/* --- 0. CSS Variables --- */
+:root {
+    --color-primary: #ffd700;
+    --color-background-start: #23272b;
+    --color-background-end: #181b1f;
+    --color-panel-dark: #1a1e22;
+    --color-border: #444b54;
+    --color-text-light: #e0e6ed;
+    --color-text-medium: #cdd6e0;
+    --color-text-dark: #181b1f;
+    --color-white: #ffffff;
+    --color-button-start: #fca311;
+    --color-button-end: #e85d04;
+    --color-plate-bg-start: #bfc3c7;
+    --color-plate-bg-end: #aab0b5;
+    --color-plate-border-inner: #888a8e;
+
+    --color-backlight: #65ff65; /* Bright green for backlight */
+    --color-backlight-glow: rgba(101, 255, 101, 0.5); /* Softer green glow */
+
+    --font-display: 'Orbitron', 'Roboto Mono', monospace;
+    --font-body: 'Roboto Mono', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --font-digital: 'VT323', monospace;
+    --font-retro: 'IBM Plex Mono', 'Roboto Mono', monospace;
+
+    --radius-main: 18px;
+    --radius-small: 8px;
+    --radius-plate: 12px;
+    --shadow-main: 0 8px 32px rgba(0,0,0,0.45);
+}
+
+
+/* --- 1. General & Typography --- */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--color-background-start) 0%, var(--color-background-start) 60%, var(--color-background-end) 100%);
+    font-family: var(--font-body);
     min-height: 100vh;
 }
 
+h1,
+.plate-title {
+    font-family: var(--font-display);
+    letter-spacing: 2px;
+}
+
+/* --- 2. Layout --- */
 .container-fluid {
-    background: white;
-    border-radius: 15px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    background: rgba(30, 34, 40, 0.98);
+    border: 3px solid var(--color-border);
+    border-radius: var(--radius-main);
+    box-shadow: var(--shadow-main);
     margin: 20px;
     overflow: hidden;
 }
 
-/* Airplane Visualization */
-.airplane-container {
-    position: relative;
-    width: 100%;
-    height: 400px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 2rem 0;
+.flight-board {
+    background-color: var(--color-panel-dark);
+    border-right: 2px solid var(--color-border);
 }
 
-.airplane {
-    position: relative;
-    width: 300px;
-    height: 80px;
-    transform: rotate(-5deg);
-    transition: all 0.5s ease;
-}
-
-.airplane-body {
-    position: relative;
-    width: 100%;
-    height: 100%;
-}
-
-.airplane-nose {
-    position: absolute;
-    left: -20px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 0;
-    height: 0;
-    border-left: 30px solid #2c3e50;
-    border-top: 15px solid transparent;
-    border-bottom: 15px solid transparent;
-}
-
-.airplane-fuselage {
-    position: absolute;
-    left: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 280px;
-    height: 30px;
-    background: linear-gradient(90deg, #34495e 0%, #2c3e50 100%);
-    border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-}
-
-.airplane-tail {
-    position: absolute;
-    right: -15px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 0;
-    height: 0;
-    border-left: 25px solid #2c3e50;
-    border-top: 20px solid transparent;
-    border-bottom: 20px solid transparent;
-}
-
-.airplane-wing-left {
-    position: absolute;
-    left: 80px;
-    top: -25px;
-    width: 60px;
-    height: 8px;
-    background: #34495e;
-    border-radius: 4px;
-    transform: rotate(-15deg);
-}
-
-.airplane-wing-right {
-    position: absolute;
-    left: 80px;
-    bottom: -25px;
-    width: 60px;
-    height: 8px;
-    background: #34495e;
-    border-radius: 4px;
-    transform: rotate(15deg);
-}
-
-.airplane-windows {
-    position: absolute;
-    left: 40px;
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.window-row {
-    display: flex;
-    gap: 40px;
-}
-
-.window {
-    width: 12px;
-    height: 12px;
-    background: #87ceeb;
-    border-radius: 50%;
-    border: 2px solid #2c3e50;
-    transition: all 0.3s ease;
-}
-
-.window.sunny {
-    background: #ffd700;
-    box-shadow: 0 0 10px #ffd700;
-}
-
-.window.shady {
-    background: #4682b4;
-    box-shadow: 0 0 5px #4682b4;
-}
-
-/* Sun Indicator */
-.sun-indicator {
-    position: absolute;
-    top: 50px;
-    right: 100px;
-    z-index: 10;
-}
-
-.sun-icon {
-    font-size: 3rem;
-    color: #ffd700;
-    animation: sunPulse 2s infinite;
-}
-
-.sun-rays {
-    position: absolute;
-    top: -10px;
-    left: -10px;
-    width: 80px;
-    height: 80px;
-    border: 2px solid #ffd700;
-    border-radius: 50%;
-    animation: sunRotate 10s linear infinite;
-}
-
-.sun-rays::before {
-    content: '';
-    position: absolute;
-    top: -5px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 4px;
-    height: 20px;
-    background: #ffd700;
-    border-radius: 2px;
-}
-
-.sun-rays::after {
-    content: '';
-    position: absolute;
-    bottom: -5px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 4px;
-    height: 20px;
-    background: #ffd700;
-    border-radius: 2px;
-}
-
-/* Shadow Indicator */
-.shadow-indicator {
-    position: absolute;
-    top: 50px;
-    left: 100px;
-    z-index: 10;
-}
-
-.shadow-area {
-    width: 60px;
-    height: 60px;
-    background: rgba(0,0,0,0.3);
-    border-radius: 50%;
-    animation: shadowPulse 2s infinite;
-}
-
-/* Animations */
-@keyframes sunPulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-}
-
-@keyframes sunRotate {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-
-@keyframes shadowPulse {
-    0%, 100% { opacity: 0.3; }
-    50% { opacity: 0.6; }
-}
-
-/* Welcome Message */
-.welcome-message {
+/* --- 3. Form & Controls --- */
+.flight-board h1 {
+    color: var(--color-primary);
+    font-size: 1.75rem;
     text-align: center;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+    margin-bottom: 2rem !important;
+}
+
+.flight-board h1 i {
+    margin-right: 12px;
+    animation: spin 8s linear infinite;
+}
+
+.form-label {
+    color: var(--color-primary);
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+}
+
+.form-label i {
+    color: var(--color-primary);
+    margin-right: 10px;
+    width: 20px;
+    text-align: center;
+}
+
+.form-control,
+.form-select {
+    background-color: var(--color-background-start);
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-small);
+    color: var(--color-text-light);
+    font-family: var(--font-digital);
+    font-size: 1.4rem;
+    letter-spacing: 2px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-control:focus,
+.form-select:focus {
+    background-color: var(--color-background-start);
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 0.2rem rgba(255, 215, 0, 0.25);
+    color: var(--color-text-light);
+}
+
+select.form-control option,
+select.form-select option {
+    background: var(--color-background-start);
+    color: var(--color-text-light);
+    font-family: var(--font-digital);
+    font-size: 1.4rem;
+}
+
+.btn-primary {
+    background: linear-gradient(145deg, var(--color-button-start), var(--color-button-end));
+    border: none;
+    border-radius: var(--radius-small);
+    color: var(--color-white);
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+    padding: 12px;
+    text-transform: uppercase;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    box-shadow: 0 0 20px rgba(252, 163, 17, 0.5);
+    transform: translateY(-2px);
+}
+
+.btn-primary i {
+    margin-right: 8px;
+}
+
+
+/* --- 4. Results & Visualization Panel --- */
+
+/* 4.1. Welcome Message */
+.welcome-message {
     padding: 2rem;
+    text-align: center;
 }
 
 .airplane-placeholder {
@@ -223,109 +172,354 @@ body {
     margin-bottom: 1rem;
 }
 
-/* Form Styling */
-.form-label {
-    font-weight: 600;
-    color: #495057;
+/* 4.2. Toggle Switches */
+.toggle-panel {
+    background: rgba(0,0,0,0.2);
+    border-radius: 15px;
+    padding: 1rem;
 }
 
-.form-select, .form-control {
-    border: 2px solid #e9ecef;
-    border-radius: 8px;
-    transition: border-color 0.3s ease;
+.toggle-switch {
+    cursor: pointer;
 }
 
-.form-select:focus, .form-control:focus {
-    border-color: #667eea;
-    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+.tumbler-img {
+    transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    width: 64px;
+    height: 64px;
 }
 
-.btn-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border: none;
-    border-radius: 8px;
-    font-weight: 600;
-    transition: all 0.3s ease;
+.tumbler-img.flipped {
+    transform: rotate(180deg);
 }
 
-.btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+.toggle-label {
+    color: var(--color-white);
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    margin-top: 0.5rem;
+    text-shadow: 0 0 5px rgba(255,255,255,0.5);
 }
 
-/* Results Styling */
-.alert-success {
-    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
-    border: none;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+/* 4.3. Instrument & Plate Components */
+.instrument {
+    background: linear-gradient(145deg, #2a2f35, #212529);
+    border-radius: 15px;
+    border: 2px solid var(--color-border);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.4);
+    color: var(--color-text-medium);
+    padding: 1.5rem;
+    position: relative;
+    text-align: center;
+    width: 250px;
 }
 
-.card {
-    border: none;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease;
+.plate {
+    background: linear-gradient(120deg, var(--color-plate-bg-start), var(--color-plate-bg-end));
+    border: 7px solid var(--color-border);
+    border-radius: var(--radius-plate);
+    box-shadow: 0 2px 16px rgba(0,0,0,0.6), 0 0 0 6px var(--color-plate-border-inner) inset;
+    color: var(--color-text-dark);
+    padding: 1.5rem;
+    position: relative;
+    text-align: center;
+    width: 250px;
+    font-family: var(--font-retro);
+    font-size: 1.15rem;
+    font-weight: 400;
 }
 
-.card:hover {
-    transform: translateY(-2px);
+.plate *, .plate b, .plate strong {
+    font-family: var(--font-retro) !important;
+    font-size: 1.15rem !important;
+    font-weight: 400 !important;
 }
 
-.card-title {
-    color: #495057;
-    font-weight: 600;
+.plate .plate-title {
+    color: var(--color-text-dark);
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    font-weight: 400;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
+.plate .card-text {
+    color: var(--color-text-dark);
+    font-size: 1.15rem;
+    font-weight: 400;
+    text-align: left;
+}
+
+.plate .instrument-unit {
+    color: var(--color-text-dark);
+    font-size: 1.15rem;
+    font-weight: 400;
+}
+
+.instrument-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.instrument-placeholder {
+    background: repeating-linear-gradient(
+        -45deg,
+        rgba(0, 0, 0, 0.2),
+        rgba(0, 0, 0, 0.2) 10px,
+        rgba(0, 0, 0, 0.3) 10px,
+        rgba(0, 0, 0, 0.3) 20px
+    );
+    border-radius: 15px;
+    border: 2px dashed var(--color-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 150px;
+}
+
+.instrument-placeholder .instrument-label {
+    color: var(--color-border);
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.instrument-panel {
+    width: 100%;
+}
+
+.instrument .instrument-label {
+    color: var(--color-primary);
+    font-family: var(--font-display);
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+}
+
+.plate-bolt {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: var(--color-panel-dark);
+    border-radius: 50%;
+    box-shadow: inset 0 1px 1px rgba(255,255,255,0.1);
+}
+.plate-bolt-inner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 4px;
+    height: 4px;
+    background: #555;
+    border-radius: 50%;
+}
+.plate-bolt.bolt-1 { top: 8px; left: 8px; }
+.plate-bolt.bolt-2 { top: 8px; right: 8px; }
+.plate-bolt.bolt-3 { bottom: 8px; left: 8px; }
+.plate-bolt.bolt-4 { bottom: 8px; right: 8px; }
+
+.plate-title i {
+    color: var(--color-text-dark);
+    margin-right: 8px;
+}
+
+/* 4.4. Airplane Visualization */
+.airplane-container {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    height: 250px; /* Adjusted height */
+    margin: 2rem 0;
+    position: relative;
+    width: 100%;
+}
+
+/* 4.5. Sun & Shadow Indicators */
+.sun-indicator {
+    display: none;
+    position: absolute;
+    z-index: 10;
+    transition: all 0.5s ease-in-out;
+}
+
+.sun-icon {
+    color: var(--color-primary);
+    filter: drop-shadow(0 0 8px #ffd70099);
+    font-size: 2.5rem;
+}
+
+.sun-rays {
+    animation: sunRotate 10s linear infinite;
+    border: 2px solid rgba(255, 215, 0, 0.5);
+    border-radius: 50%;
+    height: 80px;
+    left: -18px; /* Centered on a 2.5rem icon */
+    position: absolute;
+    top: -18px; /* Centered on a 2.5rem icon */
+    width: 80px;
+}
+
+.shadow-indicator {
+    display: none;
+    position: absolute;
+    z-index: 3; /* Below plane (z-index: 10) but above overlays (z-index: 2) if needed */
+    transition: all 0.5s ease-in-out;
+}
+
+.shadow-area {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 40px;
+    width: 300px;
+    height: 50px;
+}
+
+
+/* --- 5. Animations --- */
+@keyframes sunRotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* --- 6. Loading Spinner --- */
+.spinner-container .fa-sun {
+    animation: sunRotate 10s linear infinite;
+}
+
+.flight-board #loadingSpinner p {
+    color: var(--color-text-medium);
+    font-family: var(--font-body);
+}
+
+/* --- 7. Media Queries --- */
+@media (max-width: 992px) {
     .container-fluid {
         margin: 10px;
+        flex-direction: column;
     }
-    
-    .airplane {
-        width: 250px;
-        height: 60px;
-    }
-    
-    .airplane-fuselage {
-        width: 230px;
-        height: 25px;
-    }
-    
-    .airplane-nose {
-        border-left-width: 25px;
-        border-top-width: 12px;
-        border-bottom-width: 12px;
-    }
-    
-    .airplane-tail {
-        border-left-width: 20px;
-        border-top-width: 15px;
-        border-bottom-width: 15px;
-    }
-    
-    .window {
-        width: 10px;
-        height: 10px;
-    }
-    
-    .window-row {
-        gap: 30px;
+    .flight-board {
+        border-right: none;
+        border-bottom: 2px solid var(--color-border);
     }
 }
 
-/* Loading Animation */
-.spinner-border {
-    width: 3rem;
-    height: 3rem;
+@media (max-width: 768px) {
+    .instrument-panel {
+        justify-content: center;
+    }
+    .instrument, .plate {
+        width: 90%;
+        margin-bottom: 1rem;
+    }
 }
 
-/* Utility Classes */
-.text-primary {
-    color: #667eea !important;
+@media (max-width: 576px) {
+    .container-fluid {
+        margin: 0;
+        border-radius: 0;
+        min-height: 100vh;
+    }
+    .flight-board h1 {
+        font-size: 1.5rem;
+    }
+    #planeImage {
+        max-width: 280px;
+    }
+}
+.bg-white {
+    background-color: #2c3137 !important;
 }
 
-.bg-light {
-    background-color: #f8f9fa !important;
+/* --- Backlight Effect --- */
+.instrument-grid.backlight-on .instrument {
+    box-shadow: 0 0 25px var(--color-backlight-glow), 
+                inset 0 0 5px rgba(0,0,0,0.5);
+}
+
+.instrument-grid.backlight-on .plate {
+     box-shadow: 0 2px 16px rgba(0,0,0,0.6), 
+                0 0 0 4px var(--color-plate-border-inner) inset,
+                0 0 25px var(--color-backlight-glow);
+}
+
+.plate *, .plate b, .plate strong {
+    font-family: var(--font-retro) !important;
+    font-size: 1.15rem !important;
+    font-weight: 400 !important;
+}
+
+.clock-instrument {
+    background: #181b1f;
+    border-radius: var(--radius-plate);
+    border: 5px solid #888a8e;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.6), 0 0 0 6px #444b54 inset;
+    color: #65ff65;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 150px;
+    position: relative;
+    width: 250px;
+    margin: 0 auto;
+}
+.clock-bolt {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background: #23272b;
+    border-radius: 50%;
+    box-shadow: 0 1px 2px #000a, 0 0 0 2px #444b54;
+    z-index: 2;
+}
+.clock-bolt.bolt-1 { top: 8px; left: 8px; }
+.clock-bolt.bolt-2 { top: 8px; right: 8px; }
+.clock-bolt.bolt-3 { bottom: 8px; left: 8px; }
+.clock-bolt.bolt-4 { bottom: 8px; right: 8px; }
+.clock-bolt-inner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 6px;
+    height: 6px;
+    background: #555;
+    border-radius: 50%;
+}
+.clock-instrument .instrument-label {
+    color: #65ff65;
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    letter-spacing: 0.15em;
+    margin-bottom: 0.5rem;
+}
+.clock-display {
+    background: #181b1f;
+    border-radius: 12px;
+    box-shadow: 0 0 16px #000a, 0 0 8px #65ff6533;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 170px;
+    min-height: 48px;
+    margin: 0 auto;
+    padding: 0.5rem 1.2rem;
+}
+.aviaclock-time {
+    font-family: var(--font-digital);
+    font-size: 2.2rem;
+    color: #65ff65;
+    letter-spacing: 0.15em;
+    text-shadow: 0 0 8px #65ff65cc, 0 0 2px #000;
+    margin: 0 auto;
 } 

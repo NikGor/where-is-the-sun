@@ -4,7 +4,6 @@
 
 document.addEventListener('DOMContentLoaded', function() {
     const flightForm = document.getElementById('flightForm');
-    const loadingSpinner = document.getElementById('loadingSpinner');
     const welcomeMessage = document.getElementById('welcomeMessage');
     const resultsContainer = document.getElementById('resultsContainer');
     const airplaneVisualization = document.getElementById('airplaneVisualization');
@@ -21,7 +20,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         // Show loading state
-        showLoading();
+        welcomeMessage.classList.add('d-none');
+        resultsContainer.classList.add('d-none');
         
         try {
             const formData = {
@@ -48,23 +48,10 @@ document.addEventListener('DOMContentLoaded', function() {
         } catch (error) {
             console.error('Error:', error);
             showError('An error occurred while calculating sun position. Please try again.');
-        } finally {
-            hideLoading();
         }
     });
     
-    function showLoading() {
-        loadingSpinner.classList.remove('d-none');
-        welcomeMessage.classList.add('d-none');
-        resultsContainer.classList.add('d-none');
-    }
-    
-    function hideLoading() {
-        loadingSpinner.classList.add('d-none');
-    }
-    
     function showError(message) {
-        hideLoading();
         welcomeMessage.classList.remove('d-none');
         welcomeMessage.innerHTML = `
             <div class="alert alert-danger">
@@ -81,8 +68,10 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Update recommendation text
         const recommendationText = document.getElementById('recommendationText');
+        const recommendationSide = document.getElementById('recommendationSide');
         const sideText = result.recommended_seat_side === 'left' ? 'left side' : 'right side';
         recommendationText.textContent = `Choose a seat on the ${sideText} of the plane to minimize sun exposure.`;
+        recommendationSide.textContent = `Best Side: ${sideText}`;
         
         // Update flight details
         const flightDetails = document.getElementById('flightDetails');
@@ -96,12 +85,17 @@ document.addEventListener('DOMContentLoaded', function() {
             <strong>Duration:</strong> ${durationHours}h ${durationMinutes}m
         `;
         
-        // Update sun exposure
-        const sunExposure = document.getElementById('sunExposure');
-        sunExposure.innerHTML = `
-            <strong>Recommended side exposure:</strong> ${result.sun_exposure_percentage.toFixed(1)}%<br>
-            <strong>Opposite side exposure:</strong> ${(100 - result.sun_exposure_percentage).toFixed(1)}%
-        `;
+        // Манометр sun exposure
+        const exposureValue = document.getElementById('exposureValue');
+        const exposureArrow = document.getElementById('exposureArrow');
+        let percent = result.sun_exposure_percentage;
+        if (typeof percent !== 'number' || isNaN(percent)) percent = 0;
+        if (exposureValue) {
+            exposureValue.textContent = percent.toFixed(1) + '%';
+        }
+        // Поворот стрелки: 0% = -120deg, 100% = +120deg (240 градусов), центр (100,100)
+        const angle = -120 + (percent * 2.4);
+        if (exposureArrow) exposureArrow.setAttribute('transform', `rotate(${angle} 100 100)`);
         
         // Update airplane visualization
         updateAirplaneVisualization(result);
@@ -112,34 +106,18 @@ document.addEventListener('DOMContentLoaded', function() {
         const allNight = Array.isArray(result.sun_positions) && result.sun_positions.every(pos => pos.elevation < 0);
         const leftOverlay = document.getElementById('planeLeftOverlay');
         const rightOverlay = document.getElementById('planeRightOverlay');
-        if (allNight) {
-            leftOverlay.style.background = 'none';
-            rightOverlay.style.background = 'none';
-            sunIndicator.classList.add('d-none');
-            shadowIndicator.classList.add('d-none');
-            // Меняем текст рекомендации
-            document.getElementById('recommendationText').textContent = 'В течение всего полёта будет ночь — солнце не будет светить в окна.';
-            return;
-        }
-        sunIndicator.classList.remove('d-none');
-        shadowIndicator.classList.remove('d-none');
+        // Удаляем sunIndicator и shadowIndicator полностью
         leftOverlay.style.background = 'none';
         rightOverlay.style.background = 'none';
-        if (result.recommended_seat_side === 'left') {
-            rightOverlay.style.background = 'rgba(255, 215, 0, 0.35)';
-            leftOverlay.style.background = 'rgba(70, 130, 180, 0.35)';
-            sunIndicator.style.left = 'auto';
-            sunIndicator.style.right = '100px';
-            shadowIndicator.style.right = 'auto';
-            shadowIndicator.style.left = '100px';
-        } else {
-            leftOverlay.style.background = 'rgba(255, 215, 0, 0.35)';
-            rightOverlay.style.background = 'rgba(70, 130, 180, 0.35)';
-            sunIndicator.style.right = 'auto';
-            sunIndicator.style.left = '100px';
-            shadowIndicator.style.left = 'auto';
-            shadowIndicator.style.right = '100px';
+        // sunIndicator.classList.add('d-none');
+        // shadowIndicator.classList.add('d-none');
+        // Меняем текст рекомендации, если ночь
+        if (allNight) {
+            document.getElementById('recommendationText').textContent = 'During the entire flight it will be night — the sun will not shine into the windows.';
+            return;
         }
+        // Не показываем sunIndicator и shadowIndicator вообще
+        // Остальной код не трогаем
     }
     
     // Set default departure time to current time + 1 hour
@@ -191,4 +169,41 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize arrival options
     updateArrivalOptions();
+    
+    // Toggle switches logic
+    const instrumentGrid = document.querySelector('.instrument-grid');
+
+    // Авиационные электронные часы
+    function updateAviaclock() {
+        const clock = document.getElementById('aviaclockTime');
+        if (clock) {
+            const now = new Date();
+            const h = String(now.getHours()).padStart(2, '0');
+            const m = String(now.getMinutes()).padStart(2, '0');
+            const s = String(now.getSeconds()).padStart(2, '0');
+            clock.textContent = `${h}:${m}:${s}`;
+        }
+    }
+    setInterval(updateAviaclock, 1000);
+    updateAviaclock();
+
+    document.querySelectorAll('.tumbler-img').forEach(function(img) {
+        img.addEventListener('click', function() {
+            // Basic image toggle for all tumblers
+            if (img.dataset.toggled === 'true') {
+                img.src = '/static/tumbler.png';
+                img.dataset.toggled = 'false';
+            } else {
+                img.src = '/static/tumbler_down.png';
+                img.dataset.toggled = 'true';
+            }
+
+            // Specific action for the light switch
+            if (img.dataset.toggleId === '1') {
+                if (instrumentGrid) {
+                    instrumentGrid.classList.toggle('backlight-on');
+                }
+            }
+        });
+    });
 }); 

@@ -1,0 +1,93 @@
+<!-- Decorative toggles panel -->
+<div class="toggle-panel d-flex flex-row gap-4 mb-4">
+    <div class="toggle-switch text-center">
+        <img src="{{ url_for('static', filename='tumbler.png') }}" class="tumbler-img" data-toggle-id="1" style="width:64px; height:64px; cursor:pointer; transition:transform 0.3s;" />
+        <div class="toggle-label mt-2" style="color:#fff; font-size:1.1rem;">Свет</div>
+    </div>
+    <div class="toggle-switch text-center">
+        <img src="{{ url_for('static', filename='tumbler.png') }}" class="tumbler-img" data-toggle-id="2" style="width:64px; height:64px; cursor:pointer; transition:transform 0.3s;" />
+        <div class="toggle-label mt-2" style="color:#fff; font-size:1.1rem;">Звук</div>
+    </div>
+    <div class="toggle-switch text-center">
+        <img src="{{ url_for('static', filename='tumbler.png') }}" class="tumbler-img" data-toggle-id="3" style="width:64px; height:64px; cursor:pointer; transition:transform 0.3s;" />
+        <div class="toggle-label mt-2" style="color:#fff; font-size:1.1rem;">Wi-Fi</div>
+    </div>
+</div>
+<div class="instrument-panel d-flex flex-row flex-wrap justify-content-center align-items-start gap-5" style="margin-top: 2rem; margin-bottom: 2rem;">
+    <div class="text-center">
+        <div id="airplaneVisualization" class="airplane-container position-relative" style="height: 200px;">
+            <img id="planeImage" src="{{ url_for('static', filename='plane.png') }}" alt="Plane" style="max-width: 320px; max-height: 180px; display: block; margin: 0 auto; position: relative; z-index: 1;" />
+            <div id="planeLeftOverlay" style="position: absolute; left: 0; top: 0; width: 50%; height: 100%; pointer-events: none; z-index: 2;"></div>
+            <div id="planeRightOverlay" style="position: absolute; right: 0; top: 0; width: 50%; height: 100%; pointer-events: none; z-index: 2;"></div>
+            
+            <div id="sunIndicator" class="sun-indicator d-none">
+                <div class="sun-icon">
+                    <i class="fas fa-sun"></i>
+                </div>
+                <div class="sun-rays"></div>
+            </div>
+            
+            <div id="shadowIndicator" class="shadow-indicator d-none">
+                <div class="shadow-area"></div>
+            </div>
+        </div>
+        
+        <div id="resultsContainer" class="mt-4 d-none w-100">
+            <div class="instrument-grid">
+                <!-- Recommendation Plate -->
+                <div class="plate position-relative">
+                    <div class="plate-bolt bolt-1"><div class="plate-bolt-inner"></div></div>
+                    <div class="plate-bolt bolt-2"><div class="plate-bolt-inner"></div></div>
+                    <div class="plate-bolt bolt-3"><div class="plate-bolt-inner"></div></div>
+                    <div class="plate-bolt bolt-4"><div class="plate-bolt-inner"></div></div>
+                    <div class="plate-title">Recommendation</div>
+                    <div id="recommendationText" class="card-text mb-0"></div>
+                    <div class="instrument-unit" id="recommendationSide"></div>
+                </div>
+
+                <!-- Sun Exposure Instrument -->
+                <div class="instrument position-relative">
+                    <div class="instrument-label" style="margin-bottom:0.2rem;">Sun Exposure</div>
+                    <!-- Future content for sun exposure instrument -->
+                </div>
+
+                <!-- Flight Details Plate -->
+                <div class="plate position-relative">
+                    <div class="plate-bolt bolt-1"><div class="plate-bolt-inner"></div></div>
+                    <div class="plate-bolt bolt-2"><div class="plate-bolt-inner"></div></div>
+                    <div class="plate-bolt bolt-3"><div class="plate-bolt-inner"></div></div>
+                    <div class="plate-bolt bolt-4"><div class="plate-bolt-inner"></div></div>
+                    <div class="plate-title">Flight Details</div>
+                    <p id="flightDetails" class="card-text mb-0"></p>
+                </div>
+
+                <!-- Часы: табличка с болтами и черным прямоугольником -->
+                <div class="plate position-relative">
+                    <div class="plate-bolt bolt-1"><div class="plate-bolt-inner"></div></div>
+                    <div class="plate-bolt bolt-2"><div class="plate-bolt-inner"></div></div>
+                    <div class="plate-bolt bolt-3"><div class="plate-bolt-inner"></div></div>
+                    <div class="plate-bolt bolt-4"><div class="plate-bolt-inner"></div></div>
+                    <div class="clock-display"><span class="aviaclock-time" id="aviaclockTime">00:00:00</span></div>
+                </div>
+
+                <!-- Placeholder 2 -->
+                <div class="instrument-placeholder">
+                    <div class="instrument-label">NOT INSTALLED</div>
+                </div>
+
+                <!-- Placeholder 3 -->
+                <div class="instrument-placeholder">
+                    <div class="instrument-label">NOT INSTALLED</div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="welcomeMessage" class="welcome-message">
+            <div class="airplane-placeholder">
+                <i class="fas fa-plane fa-5x text-muted"></i>
+            </div>
+            <h3 class="text-muted mt-4">Select your flight details</h3>
+            <p class="text-muted">Choose departure and arrival airports, then select your departure time to see where the sun will be during your flight.</p>
+        </div>
+    </div>
+</div> 
