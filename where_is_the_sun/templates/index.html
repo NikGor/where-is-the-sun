@@ -1,139 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Where is the Sun? - Flight Sun Calculator</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
-</head>
-<body>
-    <div class="container-fluid">
-        <div class="row min-vh-100">
-            <!-- Left Panel - Form -->
-            <div class="col-md-4 bg-light p-4">
-                <div class="sticky-top pt-3">
-                    <h1 class="text-primary mb-4">
-                        <i class="fas fa-sun"></i> Where is the Sun?
-                    </h1>
-                    <p class="text-muted mb-4">
-                        Find the best seat to avoid sun during your flight
-                    </p>
-                    
-                    <form id="flightForm" class="needs-validation" novalidate>
-                        <div class="mb-3">
-                            <label for="departureAirport" class="form-label">
-                                <i class="fas fa-plane-departure"></i> Departure Airport
-                            </label>
-                            <select class="form-select" id="departureAirport" required>
-                                <option value="">Choose departure airport...</option>
-                                {% for airport in airports.values() %}
-                                <option value="{{ airport.code }}" {% if airport.code == 'LHR' %}selected{% endif %}>
-                                    {{ airport.code }} - {{ airport.city }}, {{ airport.country }}
-                                </option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label for="arrivalAirport" class="form-label">
-                                <i class="fas fa-plane-arrival"></i> Arrival Airport
-                            </label>
-                            <select class="form-select" id="arrivalAirport" required>
-                                <option value="">Choose arrival airport...</option>
-                                {% for airport in airports.values() %}
-                                <option value="{{ airport.code }}" {% if airport.code == 'FCO' %}selected{% endif %}>
-                                    {{ airport.code }} - {{ airport.city }}, {{ airport.country }}
-                                </option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        
-                        <div class="mb-4">
-                            <label for="departureTime" class="form-label">
-                                <i class="fas fa-clock"></i> Departure Time
-                            </label>
-                            <input type="datetime-local" class="form-control" id="departureTime" required>
-                        </div>
-                        
-                        <button type="submit" class="btn btn-primary btn-lg w-100 mb-3">
-                            <i class="fas fa-calculator"></i> Calculate Sun Position
-                        </button>
-                    </form>
-                    
-                    <div id="loadingSpinner" class="text-center d-none">
-                        <div class="spinner-border text-primary" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                        </div>
-                        <p class="mt-2">Calculating sun position...</p>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Right Panel - Results -->
-            <div class="col-md-8 bg-white p-4">
-                <div class="text-center">
-                    <div id="airplaneVisualization" class="airplane-container position-relative" style="height: 200px;">
-                        <img id="planeImage" src="{{ url_for('static', filename='plane.png') }}" alt="Plane" style="max-width: 320px; max-height: 180px; display: block; margin: 0 auto; position: relative; z-index: 1;" />
-                        <div id="planeLeftOverlay" style="position: absolute; left: 0; top: 0; width: 50%; height: 100%; pointer-events: none; z-index: 2;"></div>
-                        <div id="planeRightOverlay" style="position: absolute; right: 0; top: 0; width: 50%; height: 100%; pointer-events: none; z-index: 2;"></div>
-                        
-                        <div id="sunIndicator" class="sun-indicator d-none">
-                            <div class="sun-icon">
-                                <i class="fas fa-sun"></i>
-                            </div>
-                            <div class="sun-rays"></div>
-                        </div>
-                        
-                        <div id="shadowIndicator" class="shadow-indicator d-none">
-                            <div class="shadow-area"></div>
-                        </div>
-                    </div>
-                    
-                    <div id="resultsContainer" class="mt-4 d-none">
-                        <div class="alert alert-success">
-                            <h4><i class="fas fa-check-circle"></i> Recommendation</h4>
-                            <p id="recommendationText" class="mb-0"></p>
-                        </div>
-                        
-                        <div class="row mt-4">
-                            <div class="col-md-6">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title">
-                                            <i class="fas fa-info-circle"></i> Flight Details
-                                        </h5>
-                                        <p id="flightDetails" class="card-text"></p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title">
-                                            <i class="fas fa-chart-pie"></i> Sun Exposure
-                                        </h5>
-                                        <p id="sunExposure" class="card-text"></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div id="welcomeMessage" class="welcome-message">
-                        <div class="airplane-placeholder">
-                            <i class="fas fa-plane fa-5x text-muted"></i>
-                        </div>
-                        <h3 class="text-muted mt-4">Select your flight details</h3>
-                        <p class="text-muted">Choose departure and arrival airports, then select your departure time to see where the sun will be during your flight.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+{% extends "layout.html" %}
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
-</body>
-</html> 
+{% block content %}
+<div class="row min-vh-100">
+    <!-- Left Panel - Form -->
+    <div class="col-md-4 p-4 flight-board">
+        {% include 'components/flight_form.html' %}
+    </div>
+    
+    <!-- Right Panel - Results -->
+    <div class="col-md-8 bg-white p-4 d-flex flex-column align-items-center justify-content-center">
+        {% include 'components/results_panel.html' %}
+    </div>
+</div>
+{% endblock %} 
